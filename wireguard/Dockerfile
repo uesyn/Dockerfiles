@@ -32,6 +32,7 @@ RUN set -x -e && \
         git \
 	less \
 	iproute2 \
+	iptables \
 	iputils-ping \
 	ca-certificates
 COPY entrypoint.sh /
