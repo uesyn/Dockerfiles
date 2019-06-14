@@ -15,7 +15,7 @@ RUN git clone https://github.com/WireGuard/WireGuard.git && \
 	make tools && \
 	mv tools/wg /usr/local/bin
 
-FROM golang:1.12.4-stretch as wireguard-go
+FROM golang:1.12.5-stretch as wireguard-go
 RUN set -x -e && \
 	git clone https://git.zx2c4.com/wireguard-go && \
 	cd wireguard-go	&& \
