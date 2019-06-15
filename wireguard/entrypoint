@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# LISTEN_PORT:	PORT address used in VPN 
+# LOCAL_ADDRESS:	IP Address used in VPN 
+# PRIVATE_KEY: Private key
+# PEER_ADDRESS: PEER IP Address in VPN
+# PEER_PUBKEY: PEER Public key
+# DEVICE_NAME: device name created by wireguard
+
+set -e -o pipefail
+
+echo "DEVICE_NAME" ${DEVICE_NAME}
+wireguard-go -f ${DEVICE_NAME:=wg1} &
+
+echo "Sleep 10s"
+sleep 10
+
+echo $PRIVATE_KEY > ./privatekey
+ip addr add dev ${DEVICE_NAME} ${LOCAL_ADDRESS} peer ${PEER_ADDRESS}
+wg set ${DEVICE_NAME} listen-port ${LISTEN_PORT} private-key ./privatekey
+wg set ${DEVICE_NAME} peer ${PEER_PUBKEY} persistent-keepalive 25 allowed-ips ${PEER_ADDRESS}/32
+ip link set ${DEVICE_NAME} up
+
+tail -f /dev/null

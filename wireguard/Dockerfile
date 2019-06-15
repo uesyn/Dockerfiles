@@ -15,7 +15,7 @@ RUN git clone https://github.com/WireGuard/WireGuard.git && \
 	make tools && \
 	mv tools/wg /usr/local/bin
 
-FROM golang:1.12.5-stretch as wireguard-go
+FROM golang:1.12 as wireguard-go
 RUN set -x -e && \
 	git clone https://git.zx2c4.com/wireguard-go && \
 	cd wireguard-go	&& \
@@ -35,6 +35,6 @@ RUN set -x -e && \
 	iptables \
 	iputils-ping \
 	ca-certificates
-COPY entrypoint.sh /
+COPY entrypoint /
 
-ENTRYPOINT [ "/entrypoint.sh" ]
+ENTRYPOINT [ "/entrypoint" ]
