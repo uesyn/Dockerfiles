@@ -34,6 +34,7 @@ RUN set -x -e && \
 	iproute2 \
 	iptables \
 	iputils-ping \
+	ipcalc \
 	ca-certificates
 COPY entrypoint /
 

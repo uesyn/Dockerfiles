@@ -12,13 +12,33 @@ set -e -o pipefail
 echo "DEVICE_NAME" ${DEVICE_NAME}
 wireguard-go -f ${DEVICE_NAME:=wg1} &
 
+set -x 
 echo "Sleep 10s"
 sleep 10
 
+set_peer(){
+	local addr=$1
+	local pubkey=$2
+	wg set ${DEVICE_NAME} peer ${pubkey} persistent-keepalive 25 allowed-ips ${addr%/*}/32
+}
+
 echo $PRIVATE_KEY > ./privatekey
-ip addr add dev ${DEVICE_NAME} ${LOCAL_ADDRESS} peer ${PEER_ADDRESS}
+ip addr add dev ${DEVICE_NAME} ${LOCAL_ADDRESS}
 wg set ${DEVICE_NAME} listen-port ${LISTEN_PORT} private-key ./privatekey
-wg set ${DEVICE_NAME} peer ${PEER_PUBKEY} persistent-keepalive 25 allowed-ips ${PEER_ADDRESS}/32
+
+peer_addrs=($(set | awk '{if($1 ~ /PEER_ADDRESS[0-9].*/){print $1}}'))
+peer_keys=($(set | awk '{if($1 ~ /PEER_PUBKEY[0-9].*/){print $1}}'))
+
+if [[ ${#peer_addrs[@]} != ${#peer_keys[@]} ]]; then
+	echo "Set correct PEER_ADDRESS and PEER_PUBKEY"
+	exit 1
+fi
+for ((i=0;i<${#peer_addrs[@]};i++)); do
+	addr=$(eval echo '${PEER_ADDRESS'${i}'}')
+	key=$(eval echo '${PEER_PUBKEY'${i}'}')
+	set_peer $addr $key
+done
+
 ip link set ${DEVICE_NAME} up
 
 tail -f /dev/null
