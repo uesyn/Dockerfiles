@@ -10,7 +10,7 @@
 set -e -o pipefail
 
 if [[ $1 == "genkey" ]]; then
-	wg genkey > privatekey
+	wg genkey 2>/dev/null > privatekey
 	echo -n "PRIVATE_KEY: "
 	cat privatekey
 	echo -n "PUBLIC_KEY: "
