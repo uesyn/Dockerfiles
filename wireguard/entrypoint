@@ -5,7 +5,7 @@
 # PEER_PUBKEY: PEER Public key
 # WG_LOCAL_ADDRESS: IP Address used in VPN 
 # WG_PEER_ADDRESS:  PEER IP Address in VPN
-# DEVICE_NAME: device name created by wireguard
+# DEVICE_NAME: device name created by wireguard(optional)
 
 set -e -o pipefail
 
@@ -30,7 +30,7 @@ echo $PRIVATE_KEY > ./privatekey
 ip addr add dev ${DEVICE_NAME} ${WG_LOCAL_ADDRESS} peer ${WG_PEER_ADDRESS}
 
 wg set ${DEVICE_NAME} listen-port ${PORT} private-key ./privatekey
-wg set ${DEVICE_NAME} peer ${PEER_PUBKEY} persistent-keepalive 25 allowed-ips ${WG_PEER_ADDRESS%/*}/32
+wg set ${DEVICE_NAME} peer ${PEER_PUBKEY} persistent-keepalive 25 allowed-ips ${WG_PEER_ADDRESS}/32
 
 ip link set ${DEVICE_NAME} up
 
