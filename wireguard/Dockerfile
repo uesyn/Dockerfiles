@@ -37,5 +37,4 @@ RUN set -x -e && \
 	ipcalc \
 	ca-certificates
 COPY entrypoint /
-
 ENTRYPOINT [ "/entrypoint" ]
