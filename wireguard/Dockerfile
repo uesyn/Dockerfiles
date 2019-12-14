@@ -28,13 +28,9 @@ ENV WG_I_PREFER_BUGGY_USERSPACE_TO_POLISHED_KMOD=1
 RUN set -x -e && \
 	apt-get update && \
     	apt-get install --no-install-recommends -y \
-        curl \
-        git \
-	less \
 	iproute2 \
 	iptables \
 	iputils-ping \
-	ipcalc \
 	ca-certificates
 COPY entrypoint /
 ENTRYPOINT [ "/entrypoint" ]
