@@ -28,10 +28,8 @@ sleep 5
 
 echo $PRIVATE_KEY > ./privatekey
 ip addr add dev ${DEVICE_NAME} ${WG_LOCAL_ADDRESS} peer ${WG_PEER_ADDRESS}
-
 wg set ${DEVICE_NAME} listen-port ${PORT} private-key ./privatekey
 wg set ${DEVICE_NAME} peer ${PEER_PUBKEY} persistent-keepalive 25 allowed-ips ${WG_PEER_ADDRESS}/32
-
 ip link set ${DEVICE_NAME} up
 
 tail -f /dev/null
