@@ -18,8 +18,6 @@ if [[ $1 == "genkey" ]]; then
 	exit 0
 fi
 
-set -x 
-
 DEVICE_NAME=${DEVICE_NAME:-wg1}
 wireguard-go ${DEVICE_NAME}
 
@@ -27,6 +25,9 @@ echo "Sleep 5s to wait for device up"
 sleep 5
 
 echo $PRIVATE_KEY > ./privatekey
+
+set -x
+
 ip addr add dev ${DEVICE_NAME} ${WG_LOCAL_ADDRESS} peer ${WG_PEER_ADDRESS}
 wg set ${DEVICE_NAME} listen-port ${PORT} private-key ./privatekey
 wg set ${DEVICE_NAME} peer ${PEER_PUBKEY} persistent-keepalive 25 allowed-ips ${WG_PEER_ADDRESS}/32
