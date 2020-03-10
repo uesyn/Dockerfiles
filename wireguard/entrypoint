@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# PORT:	PORT address used in VPN 
+# PRIVATE_KEY: Private key
+# PEER_PUBKEY: PEER Public key
+# WG_LOCAL_ADDRESS: IP Address used in VPN 
+# WG_PEER_ADDRESS:  PEER IP Address in VPN
+# DEVICE_NAME: device name created by wireguard(optional)
+
+set -e -o pipefail
+
+if [[ $1 == "genkey" ]]; then
+	wg genkey 2>/dev/null > privatekey
+	echo -n "PRIVATE_KEY: "
+	cat privatekey
+	echo -n "PUBLIC_KEY: "
+	wg pubkey < privatekey
+	exit 0
+fi
+
+DEVICE_NAME=${DEVICE_NAME:-wg1}
+wireguard-go ${DEVICE_NAME}
+
+echo "Sleep 5s to wait for device up"
+sleep 5
+
+echo $PRIVATE_KEY > ./privatekey
+
+set -x
+
+ip addr add dev ${DEVICE_NAME} ${WG_LOCAL_ADDRESS} peer ${WG_PEER_ADDRESS}
+wg set ${DEVICE_NAME} listen-port ${PORT} private-key ./privatekey
+wg set ${DEVICE_NAME} peer ${PEER_PUBKEY} persistent-keepalive 25 allowed-ips ${WG_PEER_ADDRESS}/32
+ip link set ${DEVICE_NAME} up
+
+tail -f /dev/null
