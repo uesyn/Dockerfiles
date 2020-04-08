@@ -1,0 +1,21 @@
+name: "Build tailscale Image"
+on:
+  push:
+    branches:
+      - tailscale
+jobs:
+  build:
+    name: Build tailscale Container Image
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: docker login
+      run: echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+    - name: build and push image
+      run: |
+        cd ${GITHUB_WORKSPACE}/tailscale
+        TAG=latest make build
+        TAG=latest make push

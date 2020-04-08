@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+tailscaled
+tail -f /dev/null
