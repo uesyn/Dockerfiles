@@ -1,4 +1,4 @@
-name: build-and-push
+name: "Build and push devbox-base"
 
 on:
   push:
@@ -20,8 +20,8 @@ jobs:
     - name: build and push
       run: |
         export TARGET="docker-bin"
-        make image-linuxbrew
-        make push-linuxbrew
+        make image
+        make push
   linuxbrew:
     runs-on: ubuntu-latest
     steps:
