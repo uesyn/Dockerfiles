@@ -1,9 +1,8 @@
 repo_base := ghcr.io/uesyn
+target := $(TARGET)
 
 image:
-	docker build -t $(repo_base)/docker-bin -f Dockerfile-docker-bin .
-	docker build -t $(repo_base)/linuxbrew -f Dockerfile-linuxbrew .
+	docker build -t $(repo_base)/$(target) -f Dockerfile-$(target) .
 
 push:
-	docker push $(repo_base)/docker-bin
-	docker  $(repo_base)/linuxbrew
+	docker push $(repo_base)/$(target)

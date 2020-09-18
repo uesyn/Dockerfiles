@@ -1,4 +1,4 @@
-name: ci
+name: build-and-push
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     - cron:  '*/30 * * * *'
 
 jobs:
-  devbox-base:
+  docker-bin:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -19,5 +19,21 @@ jobs:
         password: ${{ secrets.CR_PAT }}
     - name: build and push
       run: |
+        export TARGET="docker-bin"
+        make image-linuxbrew
+        make push-linuxbrew
+  linuxbrew:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ghcr.io
+        username: ${{ github.repository_owner }}
+        password: ${{ secrets.CR_PAT }}
+    - name: build and push
+      run: |
+        export TARGET="linuxbrew"
         make image
         make push
