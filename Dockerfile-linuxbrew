@@ -1,14 +1,25 @@
 FROM debian:buster
 ENV HOMEBREW_NO_AUTO_UPDATE=1
-RUN set -x -e && \
-  	apt update && apt install -y build-essential curl file git
-RUN set -x -e && \
-      useradd -m -s /bin/bash linuxbrew && \
+COPY clean-brew-install /bin/clean-brew-install
+RUN chmod +x /bin/clean-brew-install 
+RUN apt update && apt install -y build-essential curl file git procps
+RUN useradd -m -s /bin/bash linuxbrew && \
       git clone https://github.com/Homebrew/brew /home/linuxbrew/.linuxbrew/Homebrew && \
       mkdir /home/linuxbrew/.linuxbrew/bin && \
       ln -s /home/linuxbrew/.linuxbrew/Homebrew/bin/brew /home/linuxbrew/.linuxbrew/bin/ && \
       chmod 775 -R /home/linuxbrew/.linuxbrew
-RUN set -x -e && \
-      eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv) && \
-      brew install asdf direnv fzf ghq git go gotags hub jq kubectx make node openssl ripgrep stern vim gh && \
-      rm -rf "$(brew --cache)"
+RUN clean-brew-install asdf
+RUN clean-brew-install direnv
+RUN clean-brew-install fzf
+RUN clean-brew-install ghq
+RUN clean-brew-install go
+RUN clean-brew-install gotags
+RUN clean-brew-install hub
+RUN clean-brew-install jq
+RUN clean-brew-install kubectx
+RUN clean-brew-install make
+RUN clean-brew-install node
+RUN clean-brew-install ripgrep
+RUN clean-brew-install stern
+RUN clean-brew-install vim
+RUN clean-brew-install gh

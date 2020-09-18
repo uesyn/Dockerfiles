@@ -1,0 +1,4 @@
+FROM golang:1.15
+RUN go get -u github.com/uesyn/clipboard/cmd/...
+RUN go get -u github.com/mattn/memo
+RUN go get -u get -u golang.org/x/tools/cmd/goimports
