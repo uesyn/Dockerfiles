@@ -17,6 +17,6 @@ jobs:
         username: ${{ github.repository_owner }}
         password: ${{ secrets.CR_PAT }}
     - name: build and push
-      runs: |
+      run: |
         make image
         make push
