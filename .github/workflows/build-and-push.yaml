@@ -37,3 +37,33 @@ jobs:
         export TARGET="linuxbrew"
         make image
         make push
+  gotools:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ghcr.io
+        username: ${{ github.repository_owner }}
+        password: ${{ secrets.CR_PAT }}
+    - name: build and push
+      run: |
+        export TARGET="gotools"
+        make image
+        make push
+  devbox-base:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ghcr.io
+        username: ${{ github.repository_owner }}
+        password: ${{ secrets.CR_PAT }}
+    - name: build and push
+      run: |
+        export TARGET="devbox-base"
+        make image
+        make push
