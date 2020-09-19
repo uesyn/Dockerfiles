@@ -23,4 +23,3 @@ RUN clean-brew-install ripgrep
 RUN clean-brew-install stern
 RUN clean-brew-install vim
 RUN clean-brew-install gh
-VOLUME /home/linuxbrew/.linuxbrew
