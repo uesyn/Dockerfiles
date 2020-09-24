@@ -2,7 +2,8 @@ name: "Build and push devbox-base"
 
 on:
   push:
-    branches: devbox-base
+    branches: 
+    - devbox-base
   schedule:
     - cron:  '*/30 * * * *'
 
