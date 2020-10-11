@@ -9,15 +9,9 @@ RUN useradd -m -s /bin/bash linuxbrew && \
       ln -s /home/linuxbrew/.linuxbrew/Homebrew/bin/brew /home/linuxbrew/.linuxbrew/bin/ && \
       chmod 775 -R /home/linuxbrew/.linuxbrew
 RUN clean-brew-install asdf
-RUN clean-brew-install direnv
-RUN clean-brew-install fzf
 RUN clean-brew-install ghq
-RUN clean-brew-install go
-RUN clean-brew-install gotags
 RUN clean-brew-install hub
 RUN clean-brew-install jq
-RUN clean-brew-install kubectx
-RUN clean-brew-install make
 RUN clean-brew-install node
 RUN clean-brew-install ripgrep
 RUN clean-brew-install stern
