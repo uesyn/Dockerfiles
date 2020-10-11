@@ -1,4 +1,4 @@
-name: "Build and push devbox-base"
+name: "Manual Build and push devbox-base"
 on: 
   workflow_dispatch:
     inputs:
