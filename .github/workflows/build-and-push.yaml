@@ -1,11 +1,12 @@
 name: "Build and push devbox-base"
 
 on:
-  push:
-    branches: 
-    - devbox-base
-  schedule:
-    - cron:  '*/30 * * * *'
+  workflow_dispatch:
+    inputs:
+      buildandpush:
+        description: 'build and push images'
+        required: false
+        default: 'default'
 
 jobs:
   docker-bin:
