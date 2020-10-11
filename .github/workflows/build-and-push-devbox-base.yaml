@@ -1,5 +1,11 @@
 name: "Build and push devbox-base"
-on: [workflow_dispatch]
+on: 
+  workflow_dispatch:
+    inputs:
+     logLevel:
+       description: 'Log level'     
+       required: true
+       default: 'warning'
 jobs:
   docker-bin:
     runs-on: ubuntu-latest
