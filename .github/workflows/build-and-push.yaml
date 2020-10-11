@@ -1,13 +1,11 @@
 name: "Build and push devbox-base"
-
-on:
+on: 
   workflow_dispatch:
     inputs:
-      buildandpush:
-        description: 'build and push images'
+      logLevel:
+        description: 'Log level'     
         required: true
-        default: 'default'
-
+        default: 'warning'
 jobs:
   docker-bin:
     runs-on: ubuntu-latest
