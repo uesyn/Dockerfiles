@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+target=$1
+
+if [[ -x /home/linuxbrew/.linuxbrew/bin/brew ]]; then
+  eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+  brew install ${target}
+  rm -rf "$(brew --cache)"
+else
+  echo "brew not found!"
+  exit 1
+fi
