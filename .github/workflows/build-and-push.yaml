@@ -5,7 +5,7 @@ on:
     inputs:
       buildandpush:
         description: 'build and push images'
-        required: false
+        required: true
         default: 'default'
 
 jobs:
