@@ -1,8 +1,5 @@
 name: "Build and push devbox-base"
 on: 
-  push:
-    branches:
-    - devbox-base
   workflow_dispatch:
     inputs:
       logLevel:
@@ -22,6 +19,7 @@ jobs:
         password: ${{ secrets.CR_PAT }}
     - name: build and push
       run: |
+        cd devbox-base
         export TARGET="docker-bin"
         make image
         make push
@@ -37,6 +35,7 @@ jobs:
         password: ${{ secrets.CR_PAT }}
     - name: build and push
       run: |
+        cd devbox-base
         export TARGET="linuxbrew"
         make image
         make push
@@ -52,6 +51,7 @@ jobs:
         password: ${{ secrets.CR_PAT }}
     - name: build and push
       run: |
+        cd devbox-base
         export TARGET="gotools"
         make image
         make push
@@ -67,6 +67,7 @@ jobs:
         password: ${{ secrets.CR_PAT }}
     - name: build and push
       run: |
+        cd devbox-base
         export TARGET="devbox-base"
         make image
         make push
