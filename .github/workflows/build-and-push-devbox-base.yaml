@@ -1,5 +1,6 @@
 name: "Build and push devbox-base"
 on: 
+  push:
   workflow_dispatch:
     inputs:
       logLevel:
