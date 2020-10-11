@@ -1,6 +1,5 @@
-name: "Build and push devbox-base"
+name: "Build and push devbox-base manually"
 on: 
-  push:
   workflow_dispatch:
     inputs:
       logLevel:
