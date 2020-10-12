@@ -3,3 +3,5 @@ ENV VERSION 19.03.9
 RUN apk add curl
 RUN curl -L -o docker.tgz https://download.docker.com/linux/static/stable/x86_64/docker-${VERSION}.tgz && \
 	    tar xzvf docker.tgz --strip-component=1 -C /usr/local/bin
+COPY docker-sudo /usr/local/bin/docker-sudo
+RUN chmod +x /usr/local/bin/docker
