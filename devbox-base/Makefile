@@ -1,8 +1,8 @@
-repo_base := ghcr.io/uesyn
+repositry := ghcr.io/uesyn/devbox
 target := $(TARGET)
 
 image:
-	docker build -t $(repo_base)/$(target) -f Dockerfile-$(target) .
+	docker build -t $(repositry) -f Dockerfile .
 
 push:
-	docker push $(repo_base)/$(target)
+	docker push $(repositry)

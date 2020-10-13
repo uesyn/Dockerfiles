@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-
-exec sudo podman --cgroup-manager=cgroupfs --events-backend=file "$@"
