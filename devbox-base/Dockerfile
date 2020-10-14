@@ -7,7 +7,7 @@ ENV DEVBOX=true \
 	HOMEBREW_NO_AUTO_UPDATE=1
 RUN set -x -e && \
   	apt update && apt install -y \
-		direnv kubectx make iptables zsh git man file curl tmux fzf \
+		kubectx make iptables zsh git man file curl tmux \
 		wget sudo less locales ca-certificates iproute2 iputils-ping \
 		dnsutils openssh-client build-essential procps software-properties-common && \
 	sed -ie "s/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/g" /etc/locale.gen && \
@@ -55,6 +55,8 @@ RUN clean-brew-install kubectl
 RUN clean-brew-install kind
 RUN clean-brew-install vim
 RUN clean-brew-install gh
+RUN clean-brew-install fzf
+RUN clean-brew-install direnv
 RUN useradd -m -s /bin/bash devbox && echo "devbox ALL=NOPASSWD: ALL" >> /etc/sudoers
 USER devbox
 ENTRYPOINT ["/usr/bin/tail", "-f", "/dev/null"]
