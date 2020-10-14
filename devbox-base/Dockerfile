@@ -41,10 +41,11 @@ RUN chmod +x /usr/local/bin/docker
 
 FROM base
 ENV PATH=$PATH:/usr/local/go/bin
+COPY docker-sudo /usr/local/bin/docker
+COPY clean-brew-install /usr/local/bin/clean-brew-install
 COPY --from=golang /usr/local/go /usr/local/go
 COPY --from=gotools /go/bin /usr/local/bin
 COPY --from=docker /usr/local/bin/docker /usr/local/bin/docker_original
-COPY docker-sudo /usr/local/bin/docker
 RUN git clone https://github.com/Homebrew/brew /home/linuxbrew/.linuxbrew/Homebrew && \
 	mkdir /home/linuxbrew/.linuxbrew/bin && \
 	ln -s /home/linuxbrew/.linuxbrew/Homebrew/bin/brew /home/linuxbrew/.linuxbrew/bin/ && \
