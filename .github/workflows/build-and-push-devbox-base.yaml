@@ -1,6 +1,7 @@
 name: "Build and push devbox-base manually"
 on: 
   workflow_dispatch:
+  push:
 jobs:
   devbox:
     runs-on: ubuntu-latest
