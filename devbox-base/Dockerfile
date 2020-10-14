@@ -18,17 +18,12 @@ RUN update-alternatives --set iptables  /usr/sbin/iptables-legacy || true && \
     update-alternatives --set arptables /usr/sbin/arptables-legacy || true
 
 
-FROM alpine as golang
-ENV GO_VERSION 1.15.1
-RUN apk add curl tar
-RUN curl -o go.tar.gz -L https://storage.googleapis.com/golang/go${GO_VERSION}.linux-amd64.tar.gz
-RUN tar -C /usr/local -xzf go.tar.gz
-
 
 FROM golang:1.15 as gotools
 RUN go get -u github.com/uesyn/clipboard/cmd/...
 RUN go get -u github.com/mattn/memo
 RUN go get -u golang.org/x/tools/cmd/goimports
+
 
 
 FROM alpine as docker
@@ -39,11 +34,10 @@ RUN curl -L -o docker.tgz https://download.docker.com/linux/static/stable/x86_64
 RUN chmod +x /usr/local/bin/docker
 
 
+
 FROM base
-ENV PATH=$PATH:/usr/local/go/bin
 COPY docker-sudo /usr/local/bin/docker
 COPY clean-brew-install /usr/local/bin/clean-brew-install
-COPY --from=golang /usr/local/go /usr/local/go
 COPY --from=gotools /go/bin /usr/local/bin
 COPY --from=docker /usr/local/bin/docker /usr/local/bin/docker_original
 RUN git clone https://github.com/Homebrew/brew /home/linuxbrew/.linuxbrew/Homebrew && \
@@ -54,9 +48,11 @@ RUN clean-brew-install asdf
 RUN clean-brew-install ghq
 RUN clean-brew-install hub
 RUN clean-brew-install jq
-RUN clean-brew-install node
+RUN clean-brew-install golang
 RUN clean-brew-install ripgrep
 RUN clean-brew-install stern
+RUN clean-brew-install kubectl
+RUN clean-brew-install kind
 RUN clean-brew-install vim
 RUN clean-brew-install gh
 RUN useradd -m -s /bin/bash devbox && echo "devbox ALL=NOPASSWD: ALL" >> /etc/sudoers
