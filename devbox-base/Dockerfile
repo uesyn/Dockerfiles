@@ -20,9 +20,9 @@ RUN update-alternatives --set iptables  /usr/sbin/iptables-legacy || true && \
 
 FROM alpine as golang
 ENV GO_VERSION 1.15.1
-RUN apk add curl
-RUN curl -L https://storage.googleapis.com/golang/go{GO_VERSION}.linux-amd64.tar.gz
-RUN tar -C /usr/local -xzf go${GO_VERSION}.linux-amd64.tar.gz
+RUN apk add curl tar
+RUN curl -o go.tar.gz -L https://storage.googleapis.com/golang/go${GO_VERSION}.linux-amd64.tar.gz
+RUN tar -C /usr/local -xzf go.tar.gz
 
 
 FROM golang:1.15 as gotools
