@@ -7,7 +7,7 @@ ENV DEVBOX=true \
 	HOMEBREW_NO_AUTO_UPDATE=1
 RUN set -x -e && \
   	apt update && apt install -y \
-		direnv kubectx make iptables zsh git man file curl tmux \
+		direnv kubectx make iptables zsh git man file curl tmux fzf \
 		wget sudo less locales ca-certificates iproute2 iputils-ping \
 		dnsutils openssh-client build-essential procps software-properties-common && \
 	sed -ie "s/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/g" /etc/locale.gen && \
