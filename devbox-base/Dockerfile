@@ -38,8 +38,6 @@ RUN chmod +x /usr/local/bin/docker
 FROM base
 COPY docker-sudo /usr/local/bin/docker
 COPY clean-brew-install /usr/local/bin/clean-brew-install
-COPY --from=gotools /go/bin /usr/local/bin
-COPY --from=docker /usr/local/bin/docker /usr/local/bin/docker_original
 RUN git clone https://github.com/Homebrew/brew /home/linuxbrew/.linuxbrew/Homebrew && \
 	mkdir /home/linuxbrew/.linuxbrew/bin && \
 	ln -s /home/linuxbrew/.linuxbrew/Homebrew/bin/brew /home/linuxbrew/.linuxbrew/bin/ && \
@@ -57,6 +55,7 @@ RUN clean-brew-install vim
 RUN clean-brew-install gh
 RUN clean-brew-install fzf
 RUN clean-brew-install direnv
+COPY --from=gotools /go/bin /usr/local/bin
+COPY --from=docker /usr/local/bin /usr/local/bin
 RUN useradd -m -s /bin/bash devbox && echo "devbox ALL=NOPASSWD: ALL" >> /etc/sudoers
-USER devbox
-ENTRYPOINT ["/usr/bin/tail", "-f", "/dev/null"]
+ENTRYPOINT ["/usr/local/bin/dockerd"]
