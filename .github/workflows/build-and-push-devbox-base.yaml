@@ -15,13 +15,13 @@ jobs:
         password: ${{ secrets.CR_PAT }}
     - name: build and push devbox-base
       run: |
-        docker build -t ghcr.io/uesyn/devbox-base devbox-base
+        docker build -t ghcr.io/uesyn/devbox-base devbox
         docker push ghcr.io/uesyn/devbox-base
     - name: build and push devbox-go
       run: |
-        docker build -t ghcr.io/uesyn/devbox-go devbox-base
+        docker build -t ghcr.io/uesyn/devbox-go devbox
         docker push ghcr.io/uesyn/devbox-go
     - name: build and push devbox-rust
       run: |
-        docker build -t ghcr.io/uesyn/devbox-rust devbox-base
+        docker build -t ghcr.io/uesyn/devbox-rust devbox
         docker push ghcr.io/uesyn/devbox-rust
