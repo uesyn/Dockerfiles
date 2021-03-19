@@ -13,7 +13,15 @@ jobs:
         registry: ghcr.io
         username: ${{ github.repository_owner }}
         password: ${{ secrets.CR_PAT }}
-    - name: build and push
+    - name: build and push devbox-base
       run: |
         docker build -t ghcr.io/uesyn/devbox-base devbox-base
         docker push ghcr.io/uesyn/devbox-base
+    - name: build and push devbox-golang
+      run: |
+        docker build -t ghcr.io/uesyn/devbox-golang devbox-base
+        docker push ghcr.io/uesyn/devbox-golang
+    - name: build and push devbox-rust
+      run: |
+        docker build -t ghcr.io/uesyn/devbox-rust devbox-base
+        docker push ghcr.io/uesyn/devbox-rust

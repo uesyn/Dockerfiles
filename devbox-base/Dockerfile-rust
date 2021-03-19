@@ -1,0 +1,6 @@
+# Languages
+FROM ghcr.io/uesyn/devbox-base
+ENV RUSTUP_HOME=/opt/rust/rustup
+ENV CARGO_HOME=/opt/rust/cargo
+ENV PATH PATH=/opt/rust/cargo/bin:${PATH}
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path

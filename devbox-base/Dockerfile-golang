@@ -1,0 +1,4 @@
+FROM ghcr.io/uesyn/devbox-base as rust-lang
+ENV GO_VERSION=1.15.8
+RUN curl -L https://golang.org/dl/go1.15.8.linux-amd64.tar.gz | tar -C /usr/local -xzf -
+ENV PATH PATH=/usr/local/go/bin:${PATH}
