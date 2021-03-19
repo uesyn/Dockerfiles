@@ -19,9 +19,9 @@ jobs:
         docker push ghcr.io/uesyn/devbox-base
     - name: build and push devbox-go
       run: |
-        docker build -t ghcr.io/uesyn/devbox-go devbox
+        docker build -f Dockerfile-go -t ghcr.io/uesyn/devbox-go devbox
         docker push ghcr.io/uesyn/devbox-go
     - name: build and push devbox-rust
       run: |
-        docker build -t ghcr.io/uesyn/devbox-rust devbox
+        docker build -f Dockerfile-rust -t ghcr.io/uesyn/devbox-rust devbox
         docker push ghcr.io/uesyn/devbox-rust
