@@ -1,0 +1,43 @@
+#!/bin/bash
+
+set -e -o pipefail
+
+URL=$1
+INSTALL_DIR=$2
+
+if [[ -z $URL ]] || [[ -z $INSTALL_DIR ]];then
+  echo "USAGE: ./hack/go-command-installer [URL] [INSTALL_DIR]"
+  echo "Example: ./hack/go-command-installer github.com/uesyn/clipboard/cmd/...@master /opt/bin"
+  exit 1
+fi
+
+if [[ -x "$(command -v sudo)" ]]; then
+  SUDO=sudo
+fi
+
+if [[ ! -d ${INSTALL_DIR} ]]; then
+  ${SUDO} mkdir -p $INSTALL_DIR
+  ${SUDO} chown $(id -u):$(id -g) ${INSTALL_DIR}
+fi
+
+TMP=$(mktemp -d)
+cleanup() {
+  [[ -d ${TMP} ]] && [[ -n ${TMP} ]] && [[ ${TMP} != "/" ]] && ${SUDO} rm -rf ${TMP}
+}
+trap 'cleanup' EXIT INT PIPE TERM
+
+export GO111MODULE=${GO111MODULE:-on}
+export GOPATH=${TMP}/go
+export GOBIN=${GOPATH}/bin
+export GOMODCACHE=${TMP}/gomodcache
+export GOCACHE=${TMP}/gobuild
+mkdir -p ${GOBIN}
+mkdir -p ${GOMODCACHE}
+mkdir -p ${GOCACHE}
+
+go get ${URL}
+
+for file in $(ls ${GOBIN}); do
+  chmod +x ${GOBIN}/${file}
+  mv ${GOBIN}/${file} ${INSTALL_DIR}/${file}
+done

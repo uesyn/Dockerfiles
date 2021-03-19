@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-
-exec sudo /usr/local/bin/docker_original "$@"

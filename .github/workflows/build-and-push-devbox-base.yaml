@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   push:
 jobs:
-  devbox:
+  devbox-base:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -15,6 +15,5 @@ jobs:
         password: ${{ secrets.CR_PAT }}
     - name: build and push
       run: |
-        cd devbox-base
-        make image
-        make push
+        docker build -t ghcr.io/uesyn/devbox-base devbox-base
+        docker push ghcr.io/uesyn/devbox-base
