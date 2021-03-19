@@ -141,7 +141,6 @@ RUN chmod 777 -R /home/linuxbrew/.linuxbrew
 
 FROM base
 COPY apt-clean-install /bin/apt-clean-install
-COPY clean-brew-install /bin/clean-brew-install
 RUN useradd -m -s /bin/bash linuxbrew
 COPY --from=brew /home/linuxbrew/.linuxbrew /home/linuxbrew/.linuxbrew
 COPY --from=docker /usr/local/bin/docker /usr/local/bin/docker
