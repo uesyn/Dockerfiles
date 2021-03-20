@@ -1,5 +1,6 @@
 # Languages
-FROM ghcr.io/uesyn/devbox-base
+ARG TAG
+FROM ghcr.io/uesyn/devbox-base:${TAG}
 ENV RUSTUP_HOME=/opt/rust/rustup
 ENV CARGO_HOME=/opt/rust/cargo
 ENV PATH=/opt/rust/cargo/bin:${PATH}

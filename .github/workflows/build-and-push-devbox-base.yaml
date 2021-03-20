@@ -28,12 +28,12 @@ jobs:
         IMAGE_TAG: "${{env.tag}}"
         DOCKER_BUILDKIT: 1
       run: |
-        docker build -f devbox/Dockerfile-go -t ghcr.io/uesyn/devbox-go:${IMAGE_TAG} devbox
+        docker build --build-arg TAG=${IMAGE_TAG} -f devbox/Dockerfile-go -t ghcr.io/uesyn/devbox-go:${IMAGE_TAG} devbox
         docker push ghcr.io/uesyn/devbox-go:${IMAGE_TAG}
     - name: Build and push devbox-rust
       env:
         IMAGE_TAG: "${{env.tag}}"
         DOCKER_BUILDKIT: 1
       run: |
-        docker build -f devbox/Dockerfile-rust -t ghcr.io/uesyn/devbox-rust:${IMAGE_TAG} devbox
+        docker build --build-arg TAG=${IMAGE_TAG} -f devbox/Dockerfile-rust -t ghcr.io/uesyn/devbox-rust:${IMAGE_TAG} devbox
         docker push ghcr.io/uesyn/devbox-rust:${IMAGE_TAG}
