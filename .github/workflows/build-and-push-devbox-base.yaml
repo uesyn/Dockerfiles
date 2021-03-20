@@ -1,4 +1,4 @@
-name: "Build and push devbox-base manually"
+name: "Build and push devbox-base"
 on: 
   workflow_dispatch:
   push:
@@ -13,15 +13,24 @@ jobs:
         registry: ghcr.io
         username: ${{ github.repository_owner }}
         password: ${{ secrets.CR_PAT }}
-    - name: build and push devbox-base
+    - name: Get tag
       run: |
-        docker build -t ghcr.io/uesyn/devbox-base devbox
-        docker push ghcr.io/uesyn/devbox-base
-    - name: build and push devbox-go
+        echo "tag=$(date -u +%Y%m%d-%H%M%S)" >> $GITHUB_ENV
+    - name: Build and push devbox-base
+      env:
+        IMAGE_TAG: "${{env.tag}}"
       run: |
-        docker build -f devbox/Dockerfile-go -t ghcr.io/uesyn/devbox-go devbox
-        docker push ghcr.io/uesyn/devbox-go
-    - name: build and push devbox-rust
+        docker build -t ghcr.io/uesyn/devbox-base:${IMAGE_TAG} devbox
+        docker push ghcr.io/uesyn/devbox-base:${IMAGE_TAG}
+    - name: Build and push devbox-go
+      env:
+        IMAGE_TAG: "${{env.tag}}"
       run: |
-        docker build -f devbox/Dockerfile-rust -t ghcr.io/uesyn/devbox-rust devbox
-        docker push ghcr.io/uesyn/devbox-rust
+        docker build -f devbox/Dockerfile-go -t ghcr.io/uesyn/devbox-go:${IMAGE_TAG} devbox
+        docker push ghcr.io/uesyn/devbox-go:${IMAGE_TAG}
+    - name: Build and push devbox-rust
+      env:
+        IMAGE_TAG: "${{env.tag}}"
+      run: |
+        docker build -f devbox/Dockerfile-rust -t ghcr.io/uesyn/devbox-rust:${IMAGE_TAG} devbox
+        docker push ghcr.io/uesyn/devbox-rust:${IMAGE_TAG}
