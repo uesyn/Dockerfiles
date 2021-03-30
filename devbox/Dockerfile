@@ -24,6 +24,7 @@ RUN apt update && \
 	ca-certificates \
 	curl \
 	dnsutils \
+	dropbear \
 	file \
 	fuse \
 	git \
