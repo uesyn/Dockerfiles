@@ -28,7 +28,6 @@ RUN apt update && \
 	file \
 	fuse \
 	git \
-	gh \
 	iproute2 \
 	iptables \
 	iputils-ping \
@@ -62,34 +61,12 @@ RUN curl -L -o docker.tgz https://download.docker.com/linux/static/stable/x86_64
 	tar xzvf docker.tgz --strip-component=1 -C /usr/local/bin
 RUN chmod +x /usr/local/bin/docker
 
-# Languages
-# FROM base as rust-lang
-# ENV RUSTUP_HOME=/opt/rust/rustup
-# ENV CARGO_HOME=/opt/rust/cargo
-# RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain none --no-modify-path
-# 
-# FROM base as golang
-# ENV GO_VERSION=1.15.8
-# RUN curl -L https://golang.org/dl/go1.15.8.linux-amd64.tar.gz | tar -C /usr/local -xzf -
-
 # Commands
 
 FROM golang:1.15 as go-cmd-downloader
 COPY go-command-install /bin/go-command-install
 RUN chmod +x /bin/go-command-install
 RUN apt update && apt install -y jq unzip
-
-FROM go-cmd-downloader as fzf
-RUN URL=$(curl -s https://api.github.com/repos/junegunn/fzf/releases/latest | jq -r '.assets[].browser_download_url' | grep $(uname | tr '[A-Z]' '[a-z]') | grep amd64) && \
-	curl -o fzf.tar.gz -L $URL && \
-	tar xf fzf.tar.gz && \
-	mv fzf /usr/local/bin/fzf
-
-FROM go-cmd-downloader as direnv 
-RUN URL=$(curl -s https://api.github.com/repos/direnv/direnv/releases/latest | jq -r '.assets[].browser_download_url' | grep $(uname | tr '[A-Z]' '[a-z]') | grep amd64) && \
-	curl -o direnv -L $URL && \
-	chmod +x direnv && \
-	mv direnv /usr/local/bin/direnv
 
 FROM go-cmd-downloader as stern
 RUN URL=$(curl -s https://api.github.com/repos/stern/stern/releases/latest | jq -r '.assets[].browser_download_url' | grep $(uname | tr '[A-Z]' '[a-z]') | grep amd64) && \
@@ -112,13 +89,6 @@ RUN URL=$(curl -s https://api.github.com/repos/kubernetes-sigs/kind/releases/lat
 	curl -o kind -L $URL && \
 	chmod +x kind && \
 	mv kind /usr/local/bin/kind
-
-FROM go-cmd-downloader as ghq 
-RUN URL=$(curl -s https://api.github.com/repos/x-motemen/ghq/releases/latest | jq -r '.assets[].browser_download_url' | grep $(uname | tr '[A-Z]' '[a-z]') | grep amd64) && \
-	curl -o ghq.zip -L $URL && \
-	unzip ghq.zip && \
-	chmod +x ghq_linux_amd64/ghq && \
-	mv ghq_linux_amd64/ghq /usr/local/bin/ghq
 
 FROM go-cmd-downloader as kubectl
 RUN curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
@@ -145,13 +115,10 @@ COPY apt-clean-install /bin/apt-clean-install
 RUN useradd -m -s /bin/bash linuxbrew
 COPY --from=brew /home/linuxbrew/.linuxbrew /home/linuxbrew/.linuxbrew
 COPY --from=docker /usr/local/bin/docker /usr/local/bin/docker
-COPY --from=fzf /usr/local/bin /usr/local/bin
-COPY --from=direnv /usr/local/bin /usr/local/bin
 COPY --from=gopls /usr/local/bin /usr/local/bin
 COPY --from=kubectx /usr/local/bin /usr/local/bin
 COPY --from=kubectl /usr/local/bin /usr/local/bin
 COPY --from=kind /usr/local/bin /usr/local/bin
-COPY --from=ghq /usr/local/bin /usr/local/bin
 COPY --from=stern /usr/local/bin /usr/local/bin
 COPY --from=neovim /usr/local/bin /usr/local/bin
 COPY entrypoint /entrypoint
