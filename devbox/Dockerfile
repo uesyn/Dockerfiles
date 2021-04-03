@@ -31,7 +31,6 @@ RUN apt update && \
 	iproute2 \
 	iptables \
 	iputils-ping \
-	jq \
 	less \
 	locales \
 	make \
@@ -39,7 +38,6 @@ RUN apt update && \
 	netcat \
 	openssh-client \
 	procps \
-	ripgrep \
 	socat \
 	sudo \
 	tmux \
