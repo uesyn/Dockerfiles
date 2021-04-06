@@ -72,16 +72,6 @@ RUN URL=$(curl -s https://api.github.com/repos/stern/stern/releases/latest | jq 
 	chmod +x stern && \
 	mv stern /usr/local/bin/stern
 
-FROM go-cmd-downloader as kubectx
-RUN URL=$(curl -s https://api.github.com/repos/ahmetb/kubectx/releases/latest | jq -r '.assets[].browser_download_url' | grep $(uname | tr '[A-Z]' '[a-z]') | grep x86_64 | grep kubectx_) && \
-	curl -L $URL | tar xzf - && \
-	chmod +x kubectx && \
-	mv kubectx /usr/local/bin/kubectx
-RUN URL=$(curl -s https://api.github.com/repos/ahmetb/kubectx/releases/latest | jq -r '.assets[].browser_download_url' | grep $(uname | tr '[A-Z]' '[a-z]') | grep x86_64 | grep kubens_) && \
-	curl -L $URL | tar xzf - && \
-	chmod +x kubens && \
-	mv kubens /usr/local/bin/kubens
-
 FROM go-cmd-downloader as kind
 RUN URL=$(curl -s https://api.github.com/repos/kubernetes-sigs/kind/releases/latest | jq -r '.assets[].browser_download_url' | grep $(uname | tr '[A-Z]' '[a-z]') | grep amd64) && \
 	curl -o kind -L $URL && \
@@ -92,9 +82,6 @@ FROM go-cmd-downloader as kubectl
 RUN curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
 RUN mv kubectl /usr/local/bin/kubectl
 RUN chmod +x /usr/local/bin/kubectl
-
-FROM go-cmd-downloader as gopls
-RUN go-command-install golang.org/x/tools/gopls@latest /usr/local/bin
 
 FROM base as neovim
 RUN curl -o /usr/local/bin/nvim -L https://github.com/neovim/neovim/releases/download/nightly/nvim.appimage
@@ -113,8 +100,6 @@ COPY apt-clean-install /bin/apt-clean-install
 RUN useradd -m -s /bin/bash linuxbrew
 COPY --from=brew /home/linuxbrew/.linuxbrew /home/linuxbrew/.linuxbrew
 COPY --from=docker /usr/local/bin/docker /usr/local/bin/docker
-COPY --from=gopls /usr/local/bin /usr/local/bin
-COPY --from=kubectx /usr/local/bin /usr/local/bin
 COPY --from=kubectl /usr/local/bin /usr/local/bin
 COPY --from=kind /usr/local/bin /usr/local/bin
 COPY --from=stern /usr/local/bin /usr/local/bin
