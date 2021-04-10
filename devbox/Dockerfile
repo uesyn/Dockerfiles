@@ -66,18 +66,6 @@ COPY go-command-install /bin/go-command-install
 RUN chmod +x /bin/go-command-install
 RUN apt update && apt install -y jq unzip
 
-FROM go-cmd-downloader as stern
-RUN URL=$(curl -s https://api.github.com/repos/stern/stern/releases/latest | jq -r '.assets[].browser_download_url' | grep $(uname | tr '[A-Z]' '[a-z]') | grep amd64) && \
-	curl -L $URL | tar xzf - --strip-components=1 && \
-	chmod +x stern && \
-	mv stern /usr/local/bin/stern
-
-FROM go-cmd-downloader as kind
-RUN URL=$(curl -s https://api.github.com/repos/kubernetes-sigs/kind/releases/latest | jq -r '.assets[].browser_download_url' | grep $(uname | tr '[A-Z]' '[a-z]') | grep amd64) && \
-	curl -o kind -L $URL && \
-	chmod +x kind && \
-	mv kind /usr/local/bin/kind
-
 FROM go-cmd-downloader as kubectl
 RUN curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
 RUN mv kubectl /usr/local/bin/kubectl
@@ -101,8 +89,6 @@ RUN useradd -m -s /bin/bash linuxbrew
 COPY --from=brew /home/linuxbrew/.linuxbrew /home/linuxbrew/.linuxbrew
 COPY --from=docker /usr/local/bin/docker /usr/local/bin/docker
 COPY --from=kubectl /usr/local/bin /usr/local/bin
-COPY --from=kind /usr/local/bin /usr/local/bin
-COPY --from=stern /usr/local/bin /usr/local/bin
 COPY --from=neovim /usr/local/bin /usr/local/bin
 COPY entrypoint /entrypoint
 ENTRYPOINT ["/entrypoint"]
