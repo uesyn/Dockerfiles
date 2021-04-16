@@ -20,7 +20,9 @@ RUN apt update && \
 	gnupg2 && \
 	apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0 && \
 	apt-add-repository https://cli.github.com/packages && \
-	apt-clean-install build-essential \
+	apt-clean-install \
+	automake libevent-dev libncurses-dev pkg-config \
+	build-essential \
 	ca-certificates \
 	curl \
 	dnsutils \
@@ -40,7 +42,6 @@ RUN apt update && \
 	procps \
 	socat \
 	sudo \
-	tmux \
 	universal-ctags \
 	unzip \
 	rsync \
@@ -58,6 +59,15 @@ ENV VERSION 20.10.2
 RUN curl -L -o docker.tgz https://download.docker.com/linux/static/stable/x86_64/docker-${VERSION}.tgz && \
 	tar xzvf docker.tgz --strip-component=1 -C /usr/local/bin
 RUN chmod +x /usr/local/bin/docker
+
+FROM base as tmux
+RUN git clone https://github.com/tmux/tmux.git && \
+    cd tmux && \
+    git checkout 3.2 && \
+    sh autogen.sh && \
+    ./configure && \
+    make && \
+    mv tmux /usr/local/bin
 
 # Commands
 
@@ -88,6 +98,7 @@ COPY apt-clean-install /bin/apt-clean-install
 RUN useradd -m -s /bin/bash linuxbrew
 COPY --from=brew /home/linuxbrew/.linuxbrew /home/linuxbrew/.linuxbrew
 COPY --from=docker /usr/local/bin/docker /usr/local/bin/docker
+COPY --from=tmux /usr/local/bin/tmux /usr/local/bin/tmux
 COPY --from=kubectl /usr/local/bin /usr/local/bin
 COPY --from=neovim /usr/local/bin /usr/local/bin
 COPY entrypoint /entrypoint
