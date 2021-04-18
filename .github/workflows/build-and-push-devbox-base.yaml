@@ -24,19 +24,3 @@ jobs:
         docker build -t ghcr.io/uesyn/devbox-base -t ghcr.io/uesyn/devbox-base:${IMAGE_TAG} devbox
         docker push ghcr.io/uesyn/devbox-base
         docker push ghcr.io/uesyn/devbox-base:${IMAGE_TAG}
-    - name: Build and push devbox-go
-      env:
-        IMAGE_TAG: "${{env.tag}}"
-        DOCKER_BUILDKIT: 1
-      run: |
-        docker build --build-arg TAG=${IMAGE_TAG} -f devbox/Dockerfile-go -t ghcr.io/uesyn/devbox-go -t ghcr.io/uesyn/devbox-go:${IMAGE_TAG} devbox
-        docker push ghcr.io/uesyn/devbox-go
-        docker push ghcr.io/uesyn/devbox-go:${IMAGE_TAG}
-    - name: Build and push devbox-rust
-      env:
-        IMAGE_TAG: "${{env.tag}}"
-        DOCKER_BUILDKIT: 1
-      run: |
-        docker build --build-arg TAG=${IMAGE_TAG} -f devbox/Dockerfile-rust -t ghcr.io/uesyn/devbox-rust -t ghcr.io/uesyn/devbox-rust:${IMAGE_TAG} devbox
-        docker push ghcr.io/uesyn/devbox-rust
-        docker push ghcr.io/uesyn/devbox-rust:${IMAGE_TAG}

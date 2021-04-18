@@ -8,7 +8,6 @@ ENV TERM=xterm-256color
 ENV LANG=en_US.UTF-8
 ENV GOMODCACHE=/tmp/gomodcache
 ENV GOCACHE=/tmp/gocache
-ENV OPT_DIR=/opt
 COPY apt-clean-install /bin/apt-clean-install
 RUN apt update && \
 	apt install -y --no-install-recommends \
@@ -18,8 +17,6 @@ RUN apt update && \
 	gnupg \
 	gnupg1 \
 	gnupg2 && \
-	apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0 && \
-	apt-add-repository https://cli.github.com/packages && \
 	apt-clean-install \
 	automake libevent-dev libncurses-dev pkg-config bison \
 	build-essential \
@@ -60,6 +57,17 @@ RUN curl -L -o docker.tgz https://download.docker.com/linux/static/stable/x86_64
 	tar xzvf docker.tgz --strip-component=1 -C /usr/local/bin
 RUN chmod +x /usr/local/bin/docker
 
+FROM base as golang
+ENV GO_VERSION=1.16.3
+RUN curl -L https://golang.org/dl/go${GO_VERSION}.linux-amd64.tar.gz | tar -C /usr/local -xzf -
+ENV PATH=/usr/local/go/bin:${PATH}
+
+FROM base as rustup
+ENV RUSTUP_HOME=/usr/local/rust/rustup
+ENV CARGO_HOME=/usr/local/rust/cargo
+ENV PATH=/usr/local/rust/cargo/bin:${PATH}
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
+
 FROM base as tmux
 RUN git clone https://github.com/tmux/tmux.git && \
     cd tmux && \
@@ -98,6 +106,12 @@ COPY apt-clean-install /bin/apt-clean-install
 RUN useradd -m -s /bin/bash linuxbrew
 COPY --from=brew /home/linuxbrew/.linuxbrew /home/linuxbrew/.linuxbrew
 COPY --from=docker /usr/local/bin/docker /usr/local/bin/docker
+ENV PATH=/usr/local/go/bin:${PATH}
+COPY --from=golang /usr/local /usr/local
+ENV RUSTUP_HOME=/usr/local/rust/rustup
+ENV CARGO_HOME=/usr/local/rust/cargo
+ENV PATH=/usr/local/rust/cargo/bin:${PATH}
+COPY --from=rust /usr/local /usr/local
 COPY --from=tmux /usr/local/bin/tmux /usr/local/bin/tmux
 COPY --from=kubectl /usr/local/bin /usr/local/bin
 COPY --from=neovim /usr/local/bin /usr/local/bin
