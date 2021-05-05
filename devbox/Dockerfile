@@ -52,7 +52,6 @@ RUN curl -fsSL https://deb.nodesource.com/setup_12.x | bash - && \
 RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" >> /etc/apt/sources.list.d/google-cloud-sdk.list && \
 	curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - && \
 	apt-clean-install google-cloud-sdk
-RUN pip install awscli && pip cache purge
 
 FROM base as docker
 ENV VERSION 20.10.2
