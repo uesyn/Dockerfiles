@@ -21,6 +21,6 @@ jobs:
         IMAGE_TAG: "${{env.tag}}"
         DOCKER_BUILDKIT: 1
       run: |
-        docker build -t ghcr.io/uesyn/devbox-base -t ghcr.io/uesyn/devbox-base:${IMAGE_TAG} devbox
+        docker build -t ghcr.io/uesyn/devbox -t ghcr.io/uesyn/devbox:${IMAGE_TAG} devbox
         docker push ghcr.io/uesyn/devbox-base
         docker push ghcr.io/uesyn/devbox-base:${IMAGE_TAG}
