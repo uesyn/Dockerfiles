@@ -48,7 +48,8 @@ RUN apt update && \
 	zsh
 RUN sed -ie "s/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/g" /etc/locale.gen && locale-gen en_US.UTF-8
 RUN curl -fsSL https://deb.nodesource.com/setup_12.x | bash - && \
-	apt-clean-install nodejs
+	apt-clean-install nodejs && \
+	npm install -g yarn
 RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" >> /etc/apt/sources.list.d/google-cloud-sdk.list && \
 	curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - && \
 	apt-clean-install google-cloud-sdk
