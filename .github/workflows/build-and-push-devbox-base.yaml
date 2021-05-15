@@ -22,5 +22,5 @@ jobs:
         DOCKER_BUILDKIT: 1
       run: |
         docker build -t ghcr.io/uesyn/devbox -t ghcr.io/uesyn/devbox:${IMAGE_TAG} devbox
-        docker push ghcr.io/uesyn/devbox-base
-        docker push ghcr.io/uesyn/devbox-base:${IMAGE_TAG}
+        docker push ghcr.io/uesyn/devbox
+        docker push ghcr.io/uesyn/devbox:${IMAGE_TAG}
