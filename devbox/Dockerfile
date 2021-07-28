@@ -50,9 +50,6 @@ RUN sed -ie "s/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/g" /etc/locale.gen && local
 RUN curl -fsSL https://deb.nodesource.com/setup_12.x | bash - && \
 	apt-clean-install nodejs && \
 	npm install -g yarn
-RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" >> /etc/apt/sources.list.d/google-cloud-sdk.list && \
-	curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - && \
-	apt-clean-install google-cloud-sdk
 
 FROM base as docker
 ENV VERSION 20.10.2
@@ -64,12 +61,6 @@ FROM base as golang
 ENV GO_VERSION=1.16.3
 RUN curl -L https://golang.org/dl/go${GO_VERSION}.linux-amd64.tar.gz | tar -C /usr/local -xzf -
 ENV PATH=/usr/local/go/bin:${PATH}
-
-FROM base as rustup
-ENV RUSTUP_HOME=/usr/local/rust/rustup
-ENV CARGO_HOME=/usr/local/rust/cargo
-ENV PATH=/usr/local/rust/cargo/bin:${PATH}
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
 
 FROM base as tmux
 RUN git clone https://github.com/tmux/tmux.git && \
@@ -111,10 +102,7 @@ COPY --from=brew /home/linuxbrew/.linuxbrew /home/linuxbrew/.linuxbrew
 COPY --from=docker /usr/local/bin/docker /usr/local/bin/docker
 ENV PATH=/usr/local/go/bin:${PATH}
 COPY --from=golang /usr/local /usr/local
-ENV RUSTUP_HOME=/usr/local/rust/rustup
-ENV CARGO_HOME=/usr/local/rust/cargo
 ENV PATH=/usr/local/rust/cargo/bin:${PATH}
-COPY --from=rust /usr/local /usr/local
 COPY --from=tmux /usr/local/bin/tmux /usr/local/bin/tmux
 COPY --from=kubectl /usr/local/bin /usr/local/bin
 COPY --from=neovim /usr/local/bin /usr/local/bin
